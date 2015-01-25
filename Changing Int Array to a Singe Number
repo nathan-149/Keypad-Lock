@@ -1,0 +1,16 @@
+//vars are doubles
+
+  for(int i = 0; i<7; i++){
+        storage = 0;
+       if(buttonState[i]!=0){
+        storage = 1;
+        for(int x=7; x >counter; x--){
+          storage*=10;
+          delay(3);
+        }
+        final += storage;
+        
+       }
+
+        counter++;
+        }
