@@ -1,4 +1,5 @@
-//PRESS 78A To unlock
+//PASSWORD IS 1 2 3 4
+
 int row[] = {0, 0, 0, 0};
 int column[] = {0, 0, 0};
 
