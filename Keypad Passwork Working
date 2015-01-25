@@ -1,0 +1,190 @@
+//PRESS 78A To unlock
+int row[] = {0, 0, 0, 0};
+int column[] = {0, 0, 0};
+
+
+
+/*
+CODES
+1: 10001000
+2: 10000100
+3: 10000010
+4: 1001000
+5: 1000100
+6: 1000010
+7: 101000
+8: 100100
+9: 100010
+*: 11000
+0: 10100
+#: 10010
+*/
+int counter = 0;
+int correct = 0;
+int ledTrue=7;
+int ledFalse=6;
+int storage = 0;
+int final=0;
+double last = 0;
+int tries = 0;
+boolean locked = false;
+
+// Variables will change:
+int buttonState[] = {0,0,0,0,0,0,0};      
+
+void setup()
+{
+  pinMode(8, OUTPUT);
+  pinMode(7,OUTPUT);
+  pinMode(2, INPUT);
+  pinMode(3, INPUT);
+  pinMode(4, INPUT);
+  pinMode(5, INPUT);
+  pinMode(9, OUTPUT);
+  pinMode(10, OUTPUT);
+  pinMode(11, OUTPUT);
+  digitalWrite(9, HIGH);
+  digitalWrite(10, HIGH);
+  digitalWrite(11, HIGH);
+
+
+  for (int i= 2; i < 6; i++)
+  {
+    digitalWrite(i,LOW);
+  }
+  Serial.begin(9600);
+}
+
+void loop()
+{
+  int counter = 0;
+  double storage = 0;
+  double final=0;
+  delay(50);
+    final = 0;
+  ReadRows();
+  ReadColumns();
+   for(int i = 0; i <7; i++){
+    if (i<4)
+      buttonState[i] = row[i];
+    else
+      buttonState[i] = column[i-4];
+  }
+
+  
+  for(int i = 0; i<7; i++){
+        storage = 0;
+       if(buttonState[i]!=0){
+        storage = 1;
+        for(int x=7; x >counter; x--){
+          storage*=10;
+          delay(3);
+        }
+        final += storage;
+        
+       }
+
+        counter++;
+        }
+   if(final > 10900 && final != last){
+         delay(3);
+         tries++;
+         if(correct == 0){
+         if(final ==  10001000){
+             correct++;
+             Serial.println("1");}
+         }
+         if(correct == 1){
+         if(final ==  10000100){
+                  Serial.println("2");
+
+             correct++;}
+         }     
+         if(correct == 2){
+         if(final ==  10000010){
+                      Serial.println("3");
+
+             correct++;}
+         }
+          if(correct == 3){
+         if(final ==  1001000){
+                      Serial.println("4");
+
+             correct++;}
+         }        
+   }
+   
+
+        last = final;
+  
+        if(tries ==4){
+          if(correct != 4)
+          {
+            tries = 0;
+            correct = 0;
+            Serial.println("INCORECT");
+          }
+          if(correct == 4)
+           {
+             tries = 0;
+             correct = 0;
+             Serial.println("CORRECT");
+           }
+        }
+  
+     /*   if(correct >= 3)
+          digitalWrite(8,HIGH);
+        else
+          digitalWrite(7, HIGH); */
+}
+void ReadRows()
+{
+ //Make Them Into Inputs 
+
+   for (int i= 2; i < 6; i++)
+  {
+    pinMode(i,INPUT);
+    digitalWrite(i,LOW);
+  }
+  
+  //Reading
+  for (int i= 2; i < 6; i++)
+  {
+  //Serial.print(digitalRead(i));    
+    row[i - 2] = digitalRead(i);
+  }
+ 
+//Drain 
+   for (int i= 2; i < 6; i++)
+  {
+    pinMode(i,OUTPUT);
+    digitalWrite(i,LOW);
+  }
+  delay(100);
+}
+
+
+ void ReadColumns()
+{
+   //Make Them Into Inputs 
+
+   for (int i= 9; i < 12; i++)
+  {
+    pinMode(i,INPUT);
+    digitalWrite(i, LOW);
+  }
+//Reading
+  for (int i= 9; i < 12; i++)
+  {
+  // Serial.print(!(digitalRead(i)));
+    column [i-9] = abs(digitalRead(i)-1); 
+  }
+ //Serial.println("");
+//Drain 
+   for (int i= 9; i < 12; i++)
+  {
+    pinMode(i,OUTPUT);
+    digitalWrite(i,HIGH);
+  }
+  delay(100);
+} 
