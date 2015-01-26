@@ -1,0 +1,38 @@
+int buttonPin_Red = A4;
+int ledPin_Red = 13;
+
+int buttonPin_Green = A5;
+int ledPin_Green = 12;
+int buttonState_Red = 0;
+int buttonState_Green = 0;
+int LOCK_PIN = 6;
+
+void setup()
+{
+  pinMode(buttonPin_Red, INPUT);
+  pinMode(ledPin_Red, OUTPUT);
+  pinMode(buttonPin_Green, INPUT);
+  pinMode(ledPin_Green, OUTPUT);
+  pinMode(LOCK_PIN, OUTPUT);
+  Serial.begin(9600);
+}
+
+void loop()
+{
+  buttonState_Red = digitalRead(buttonPin_Red);
+  buttonState_Green = digitalRead(buttonPin_Green);
+  Serial.println(buttonState_Red);
+  if (buttonState_Red == HIGH)
+  {
+    digitalWrite(ledPin_Red, HIGH);
+    digitalWrite(ledPin_Green, LOW);
+    digitalWrite(LOCK_PIN, LOW);
+  }
+  if (buttonState_Green == HIGH)
+  {
+    digitalWrite(ledPin_Red, LOW);
+    digitalWrite(ledPin_Green, HIGH);
+    digitalWrite(LOCK_PIN, HIGH);
+
+  }
+}
